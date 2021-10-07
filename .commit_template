@@ -1,0 +1,24 @@
+
+
+#### Emoji Prefix ####
+# ✨ :sparkles:         Introducing new features.
+# ⚡️ :zap:              General update.
+# 🐞 :beetle:           Bug Fix.
+# 🚑 :ambulance:        Critical Bug Fix.
+# 💄 :lipstick:         Updating the UI and style files.
+# ♻️ :recycle:          Refactoring code.
+# 🎨 :art:              Improving structure / format of the code.
+# 🐎 :racehorse:        Improving performance.
+# 📝 :pencil:           Writing docs.
+# 💚 :green_heart:      Fixing CI Build.
+# ✅ :white_check_mark: Updating tests.
+# 🔥 :fire:             Removing code or files.
+# 🐳 :whale:            Work about Docker.
+# 🔧 :wrench:           Changing configuration files.
+# 🎉 :tada:             Initial commit.
+
+#### Format ####
+# :emoji: Subject
+#
+# Message
+
