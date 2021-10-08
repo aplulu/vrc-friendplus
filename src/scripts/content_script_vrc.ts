@@ -235,7 +235,13 @@ const processWorldGroup = async (group: Element) => {
                                 // ignored
                             }
 
-                            messageArea.innerHTML = '<span style="color: red;">' + message + '</span>';
+                            while (messageArea.firstChild != null) {
+                                messageArea.removeChild(messageArea.firstChild);
+                            }
+                            const span = document.createElement('SPAN');
+                            span.style.color = 'red';
+                            span.innerText = message;
+                            messageArea.appendChild(span);
                             addButton.disabled = false;
                         }
                     }

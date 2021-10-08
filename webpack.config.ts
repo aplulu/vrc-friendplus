@@ -24,7 +24,10 @@ const config: webpack.Configuration = {
     },
     plugins: [
         new WebpackCopyPlugin({
-            patterns: ['./*.json', './img/*.png'],
+            patterns: [{
+                from: browser === 'firefox' ? 'manifest_v2.json' : 'manifest.json',
+                to: './manifest.json',
+            }, './img/*.png'],
         }),
     ]
 };
