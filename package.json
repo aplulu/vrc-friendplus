@@ -1,4 +1,6 @@
 {
+  "name": "vrc-friendplus",
+  "license": "MIT",
   "scripts": {
     "build:chrome": "cross-env BROWSER=chrome NODE_ENV=development webpack",
     "build:chrome:prod": "cross-env BROWSER=chrome NODE_ENV=production webpack",
@@ -9,6 +11,7 @@
     "@types/chrome": "^0.0.148",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/dotenv-webpack": "^7.0.3",
+    "@types/firefox-webext-browser": "^82.0.1",
     "@types/node": "^16.4.1",
     "copy-webpack-plugin": "^9.0.1",
     "cross-env": "^7.0.3",
@@ -20,8 +23,5 @@
     "webpack": "^5.46.0",
     "webpack-cli": "^4.7.2"
   },
-  "dependencies": {
-    "graphql": "^15.5.1",
-    "graphql-request": "^3.4.0"
-  }
+  "dependencies": {}
 }
