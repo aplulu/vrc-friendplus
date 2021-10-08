@@ -59,10 +59,13 @@ const processLocationCard = async (card: Element) => {
             });
             const instance = await instanceResp.json();
             if (instance) {
-                const userResp = await fetch('https://vrchat.com/api/1/users/' + instance.ownerId + '?apiKey=' + apiKey, {
-                    credentials: 'include',
-                });
-                const user = await userResp.json();
+                let owner;
+                if (instance.ownerId) {
+                    const userResp = await fetch('https://vrchat.com/api/1/users/' + instance.ownerId + '?apiKey=' + apiKey, {
+                        credentials: 'include',
+                    });
+                    owner = await userResp.json();
+                }
 
 
                 const exists = card.getElementsByClassName('location-info');
@@ -80,16 +83,18 @@ const processLocationCard = async (card: Element) => {
                     locationInfo.classList.add('location-info');
                 }
 
-                const ownerLabel = document.createElement('SPAN');
-                ownerLabel.classList.add('mr-1');
-                ownerLabel.innerText = 'Instance Owner: ';
-                locationInfo.appendChild(ownerLabel);
+                if (owner) {
+                    const ownerLabel = document.createElement('SPAN');
+                    ownerLabel.classList.add('mr-1');
+                    ownerLabel.innerText = 'Instance Owner: ';
+                    locationInfo.appendChild(ownerLabel);
 
-                const ownerLink = document.createElement('A') as HTMLAnchorElement;
-                ownerLink.classList.add('mr-2');
-                ownerLink.href = 'https://vrchat.com/home/user/' + instance.ownerId;
-                ownerLink.innerText = user.displayName;
-                locationInfo.appendChild(ownerLink);
+                    const ownerLink = document.createElement('A') as HTMLAnchorElement;
+                    ownerLink.classList.add('mr-2');
+                    ownerLink.href = 'https://vrchat.com/home/user/' + instance.ownerId;
+                    ownerLink.innerText = owner.displayName;
+                    locationInfo.appendChild(ownerLink);
+                }
 
                 const usersLabel = document.createElement('SPAN');
                 usersLabel.classList.add('mr-1');
