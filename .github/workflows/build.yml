@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [chrome, firefox]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn install
+      - name: Build Extension
+        run: yarn build:${{ matrix.target }}:prod
+      - name: Archive Files
+        run: |
+          cd dist/${{ matrix.target }}/production
+          zip -r ../../vrc-friendplus-${{ matrix.target }}.zip ./
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vrc-friendplus-${{ matrix.target }}
+          path: dist/vrc-friendplus-${{ matrix.target }}.zip
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: dist/*.zip
