@@ -22,6 +22,13 @@ const processLocationCard = async (card: Element) => {
             if (!instanceId) {
                 return;
             }
+            const instanceResp = await fetch('https://vrchat.com/api/1/instances/' + worldId + ':' + instanceId + '?apiKey=' + apiKey, {
+                credentials: 'include',
+            });
+            const instance = await instanceResp.json();
+            if (!instance) {
+                return;
+            }
 
             // Invite Me Button
             const inviteButton = card.getElementsByClassName('inviteme');
@@ -35,13 +42,15 @@ const processLocationCard = async (card: Element) => {
                     messageArea.style.color = 'red';
                     inviteme.addEventListener('click', async () => {
 
-                        const inviteResp = await fetch('https://vrchat.com/api/1/instances/' + worldId + ':' + instanceId + '/invite?apiKey=' + apiKey, {
+                        const inviteResp = await fetch('https://vrchat.com/api/1/invite/myself/to/' + worldId + ':' + instanceId + '?apiKey=' + apiKey, {
                             method: 'POST',
                             credentials: 'include',
                             headers: {
                                 'content-type': 'application/json;charset=UTF-8',
                             },
-                            body: '{}',
+                            body: JSON.stringify({
+                                shortName: instance.shortName ?? instance.secureName,
+                            }),
                         });
                         if (inviteResp.status == 200) {
                             const invite = await inviteResp.json();
@@ -73,65 +82,57 @@ const processLocationCard = async (card: Element) => {
 
             }
 
-
-            const instanceResp = await fetch('https://vrchat.com/api/1/instances/' + worldId + ':' + instanceId + '?apiKey=' + apiKey, {
-                credentials: 'include',
-            });
-            const instance = await instanceResp.json();
-            if (instance) {
-                let owner;
-                if (instance.ownerId) {
-                    const userResp = await fetch('https://vrchat.com/api/1/users/' + instance.ownerId + '?apiKey=' + apiKey, {
-                        credentials: 'include',
-                    });
-                    owner = await userResp.json();
-                }
-
-
-                const exists = card.getElementsByClassName('location-info');
-
-                let isExists = false;
-                let locationInfo;
-                if (exists.length > 0 && exists[0] instanceof Element) {
-                    locationInfo = exists[0] as Element;
-                    while (locationInfo.firstChild) {
-                        locationInfo.removeChild(locationInfo.firstChild);
-                    }
-                    isExists = true;
-                } else {
-                    locationInfo = document.createElement('DIV');
-                    locationInfo.classList.add('location-info');
-                }
-
-                if (owner) {
-                    const ownerLabel = document.createElement('SPAN');
-                    ownerLabel.classList.add('mr-1');
-                    ownerLabel.innerText = 'Instance Owner: ';
-                    locationInfo.appendChild(ownerLabel);
-
-                    const ownerLink = document.createElement('A') as HTMLAnchorElement;
-                    ownerLink.classList.add('mr-2');
-                    ownerLink.href = 'https://vrchat.com/home/user/' + instance.ownerId;
-                    ownerLink.innerText = owner.displayName;
-                    locationInfo.appendChild(ownerLink);
-                }
-
-                const usersLabel = document.createElement('SPAN');
-                usersLabel.classList.add('mr-1');
-                usersLabel.innerText = 'Users: ';
-                locationInfo.appendChild(usersLabel);
-
-                const usersValue = document.createElement('SPAN');
-                usersValue.classList.add('mr-2');
-                usersValue.innerText = instance.n_users + '/' + instance.capacity
-                locationInfo.appendChild(usersValue);
-
-                const title = card.getElementsByClassName('location-title');
-                if (title.length > 0 && title[0] instanceof Element && title[0].parentElement) {
-                    title[0].parentElement.insertBefore(locationInfo, title[0].nextSibling);
-                }
+            let owner;
+            if (instance.ownerId) {
+                const userResp = await fetch('https://vrchat.com/api/1/users/' + instance.ownerId + '?apiKey=' + apiKey, {
+                    credentials: 'include',
+                });
+                owner = await userResp.json();
             }
-            break;
+
+
+            const exists = card.getElementsByClassName('location-info');
+
+            let isExists = false;
+            let locationInfo;
+            if (exists.length > 0 && exists[0] instanceof Element) {
+                locationInfo = exists[0] as Element;
+                while (locationInfo.firstChild) {
+                    locationInfo.removeChild(locationInfo.firstChild);
+                }
+                isExists = true;
+            } else {
+                locationInfo = document.createElement('DIV');
+                locationInfo.classList.add('location-info');
+            }
+
+            if (owner) {
+                const ownerLabel = document.createElement('SPAN');
+                ownerLabel.classList.add('mr-1');
+                ownerLabel.innerText = 'Instance Owner: ';
+                locationInfo.appendChild(ownerLabel);
+
+                const ownerLink = document.createElement('A') as HTMLAnchorElement;
+                ownerLink.classList.add('mr-2');
+                ownerLink.href = 'https://vrchat.com/home/user/' + instance.ownerId;
+                ownerLink.innerText = owner.displayName;
+                locationInfo.appendChild(ownerLink);
+            }
+
+            const usersLabel = document.createElement('SPAN');
+            usersLabel.classList.add('mr-1');
+            usersLabel.innerText = 'Users: ';
+            locationInfo.appendChild(usersLabel);
+
+            const usersValue = document.createElement('SPAN');
+            usersValue.classList.add('mr-2');
+            usersValue.innerText = instance.n_users + '/' + instance.capacity
+            locationInfo.appendChild(usersValue);
+
+            const title = card.getElementsByClassName('location-title');
+            if (title.length > 0 && title[0] instanceof Element && title[0].parentElement) {
+                title[0].parentElement.insertBefore(locationInfo, title[0].nextSibling);
+            }
         }
     }
 };
