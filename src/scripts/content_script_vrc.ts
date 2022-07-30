@@ -31,6 +31,8 @@ const processLocationCard = async (card: Element) => {
                     const inviteme = document.createElement('BUTTON');
                     inviteme.classList.add('btn', 'btn-primary', 'btn-sm', 'mx-1', 'inviteme');
                     inviteme.innerText = 'INVITE ME';
+                    const messageArea = document.createElement('SPAN');
+                    messageArea.style.color = 'red';
                     inviteme.addEventListener('click', async () => {
 
                         const inviteResp = await fetch('https://vrchat.com/api/1/instances/' + worldId + ':' + instanceId + '/invite?apiKey=' + apiKey, {
@@ -41,14 +43,32 @@ const processLocationCard = async (card: Element) => {
                             },
                             body: '{}',
                         });
-                        const invite = await inviteResp.json();
-                        inviteme.innerHTML = '<span aria-hidden="true" class="fa fa-check"></span>';
-                        setTimeout(() => {
-                            inviteme.innerText = 'INVITE ME';
-                        }, 3000);
+                        if (inviteResp.status == 200) {
+                            const invite = await inviteResp.json();
+                            inviteme.innerHTML = '<span aria-hidden="true" class="fa fa-check"></span>';
+                            setTimeout(() => {
+                                inviteme.innerText = 'INVITE ME';
+                            }, 3000);
+                        }else{
+                            let message = 'Unexpected error.';
+                            try {
+                                const result = await inviteResp.json() as ErrorResponse;
+                                if (result.error && result.error.message) {
+                                    inviteme.innerHTML = '<span aria-hidden="true" class="fa fa-check"></span>';
+                                    message = result.error.message;
+                                }
+                            } catch (e) {
+                                // ignored
+                            }
+                            messageArea.innerText = message;
+                            setTimeout(() => {
+                                 messageArea.innerText = "";
+                            }, 3000);
+                        }
                     });
 
                     numberFriendsBadge[0].parentElement.appendChild(inviteme);
+                    numberFriendsBadge[0].parentElement.appendChild(messageArea)
                 }
 
             }
