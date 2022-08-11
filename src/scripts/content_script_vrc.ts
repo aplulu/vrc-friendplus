@@ -23,37 +23,6 @@ const processLocationCard = async (card: Element) => {
                 return;
             }
 
-            // Invite Me Button
-            const inviteButton = card.getElementsByClassName('inviteme');
-            if (inviteButton.length == 0) {
-                const numberFriendsBadge = card.getElementsByClassName('badge-secondary');
-                if (numberFriendsBadge.length > 0 && numberFriendsBadge[0] instanceof Element　&& numberFriendsBadge[0].parentElement) {
-                    const inviteme = document.createElement('BUTTON');
-                    inviteme.classList.add('btn', 'btn-primary', 'btn-sm', 'mx-1', 'inviteme');
-                    inviteme.innerText = 'INVITE ME';
-                    inviteme.addEventListener('click', async () => {
-
-                        const inviteResp = await fetch('https://vrchat.com/api/1/instances/' + worldId + ':' + instanceId + '/invite?apiKey=' + apiKey, {
-                            method: 'POST',
-                            credentials: 'include',
-                            headers: {
-                                'content-type': 'application/json;charset=UTF-8',
-                            },
-                            body: '{}',
-                        });
-                        const invite = await inviteResp.json();
-                        inviteme.innerHTML = '<span aria-hidden="true" class="fa fa-check"></span>';
-                        setTimeout(() => {
-                            inviteme.innerText = 'INVITE ME';
-                        }, 3000);
-                    });
-
-                    numberFriendsBadge[0].parentElement.appendChild(inviteme);
-                }
-
-            }
-
-
             const instanceResp = await fetch('https://vrchat.com/api/1/instances/' + worldId + ':' + instanceId + '?apiKey=' + apiKey, {
                 credentials: 'include',
             });
