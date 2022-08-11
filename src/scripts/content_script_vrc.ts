@@ -36,17 +36,14 @@ const processLocationCard = async (card: Element) => {
                     owner = await userResp.json();
                 }
 
-
                 const exists = card.getElementsByClassName('location-info');
 
-                let isExists = false;
                 let locationInfo;
                 if (exists.length > 0 && exists[0] instanceof Element) {
                     locationInfo = exists[0] as Element;
                     while (locationInfo.firstChild) {
                         locationInfo.removeChild(locationInfo.firstChild);
                     }
-                    isExists = true;
                 } else {
                     locationInfo = document.createElement('DIV');
                     locationInfo.classList.add('location-info');
