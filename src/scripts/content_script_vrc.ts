@@ -25,7 +25,7 @@ const processLocationCard = async (card: Element) => {
     if (!worldId) {
         return;
     }
-    const instanceId = u.searchParams.get('instanceId');
+    const instanceId = u.searchParams.get('instance');
     if (!instanceId) {
         return;
     }
