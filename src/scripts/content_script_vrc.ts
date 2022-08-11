@@ -1,4 +1,5 @@
 const apiKey = 'JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26';
+const doneMarkClassName = 'vrc-friendplus-done-mark';
 
 type ErrorMessage = {
     message: string;
@@ -9,10 +10,15 @@ type ErrorResponse = {
 };
 
 const processLocationCard = async (card: Element) => {
+    // prevent mutation infinite loop
+    if (card.classList.contains(doneMarkClassName)) {
+        return;
+    }
     const link = card.querySelector<HTMLAnchorElement>('a[href*="/home/launch"]');
     if (!link) {
         return;
     }
+    card.classList.add(doneMarkClassName);
     const href = link.href;
     const u = new URL(href);
     const worldId = u.searchParams.get('worldId');
