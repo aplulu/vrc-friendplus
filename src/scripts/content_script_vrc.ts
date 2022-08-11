@@ -281,12 +281,14 @@ const main = () => {
     const observer = new MutationObserver(records => {
         const isWorldPage = window.location.href.indexOf('https://vrchat.com/home/world/wrld_') === 0;
         const isLaunchPage = window.location.href.indexOf('https://vrchat.com/home/launch') === 0;
+        const cards = document.querySelectorAll('.locations > div');
         for (let record of records) {
             for (const addedNode of record.addedNodes) {
                 if (addedNode instanceof HTMLElement) {
-                    const cards = addedNode.querySelectorAll('.location-card.size-large');
                     for (const card of cards) {
-                        processLocationCard(card);
+                        if (card.contains(addedNode)) {
+                            processLocationCard(card);
+                        }
                     }
 
                     // World Button Group
