@@ -57,27 +57,31 @@ const processLocationCard = async (card: Element) => {
         }
 
         if (owner) {
+            const ownerInfo = document.createElement('DIV');
+            locationInfo.appendChild(ownerInfo);
             const ownerLabel = document.createElement('SPAN');
             ownerLabel.classList.add('mr-1');
             ownerLabel.innerText = 'Instance Owner: ';
-            locationInfo.appendChild(ownerLabel);
+            ownerInfo.appendChild(ownerLabel);
 
             const ownerLink = document.createElement('A') as HTMLAnchorElement;
             ownerLink.classList.add('mr-2');
             ownerLink.href = 'https://vrchat.com/home/user/' + instance.ownerId;
             ownerLink.innerText = owner.displayName;
-            locationInfo.appendChild(ownerLink);
+            ownerInfo.appendChild(ownerLink);
         }
 
+        const usersInfo = document.createElement('DIV');
+        locationInfo.appendChild(usersInfo);
         const usersLabel = document.createElement('SPAN');
         usersLabel.classList.add('mr-1');
         usersLabel.innerText = 'Users: ';
-        locationInfo.appendChild(usersLabel);
+        usersInfo.appendChild(usersLabel);
 
         const usersValue = document.createElement('SPAN');
         usersValue.classList.add('mr-2');
         usersValue.innerText = instance.n_users + '/' + instance.capacity
-        locationInfo.appendChild(usersValue);
+        usersInfo.appendChild(usersValue);
 
         link.parentElement?.insertBefore(locationInfo, link.nextSibling);
     }
