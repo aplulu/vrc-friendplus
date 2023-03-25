@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "VRC FriendPlus",
-  "version": "0.2.1",
+  "version": "0.2.4",
   "description": "VRChatのWebサイトを少し便利にする機能を追加",
   "icons": {
     "128": "img/vfp128.png"
